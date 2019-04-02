@@ -11,7 +11,7 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author Saul
+ * @author GrupoL
  */
 public class Main {
 
@@ -21,6 +21,7 @@ public class Main {
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProyectoSIIPU");
         EntityManager em = emf.createEntityManager();
+        Persistence.generateSchema("ProyectoSIIPU", emf.getProperties());
         em.close();
         emf.close();
     }
