@@ -1,4 +1,3 @@
-
 package control;
 
 import java.io.Serializable;
@@ -30,16 +29,6 @@ public class ControladorOrdenesPago implements Serializable{
 
     public void setListarOrdenesPago(ArrayList<OrdenesPago> listOP) {
         this.listOP = listOP;
-    }
-    
-    
-
-    public void addOrdenPago(OrdenesPago ordPago) {
-        
-    }
-    
-    public void deleteOrdenPago(OrdenesPago ordPago) {
-        
     }
     
 }
