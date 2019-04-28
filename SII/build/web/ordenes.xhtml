@@ -11,11 +11,12 @@
     <ui:define name="contenido">
         <h:body>
             <h:form>
-                <h:dataTable>
+                <h:dataTable id="listOrd" value="#{ordenesPago.}" var="ordenPago">
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Código"/>
                         </f:facet>
+                        <h:outputText value="#{ordenPago.numero}"/>
                         <f:facet name="footer">
                             <h:inputText/>
                         </f:facet>     
@@ -24,6 +25,7 @@
                         <f:facet name="header">
                             <h:outputText value="Emisor"/>
                         </f:facet>
+                        <h:outputText value="#{ordenPago.emisor}"/>
                         <f:facet name="footer">
                             <h:inputText/>
                         </f:facet>
@@ -32,6 +34,7 @@
                         <f:facet name="header">
                             <h:outputText value="Fecha"/>
                         </f:facet>
+                        <h:outputText value="#{ordenPago.fecha}"/>
                         <f:facet name="footer">
                             <h:inputText/>
                         </f:facet>

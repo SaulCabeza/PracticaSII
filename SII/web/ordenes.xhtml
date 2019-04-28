@@ -11,14 +11,12 @@
     <ui:define name="contenido">
         <h:body>
             <h:form>
-                <h:dataTable value="#{ControladorOrdenesPago.listarOrdenesPago}" var="ordenPago">
+                <h:dataTable id="listOrd" value="#{ordenesPago.}" var="ordenPago">
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Código"/>
                         </f:facet>
-                        <f:facet name="body">
-                            <h:outputText value="#{ordenPago.numero}"/>
-                        </f:facet> 
+                        <h:outputText value="#{ordenPago.numero}"/>
                         <f:facet name="footer">
                             <h:inputText/>
                         </f:facet>     
