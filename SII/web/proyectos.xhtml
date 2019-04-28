@@ -11,11 +11,12 @@
     <ui:define name="contenido">
         <h:body>
             <h:form>
-                <h:dataTable>
+                <h:dataTable value="#{proyectoBean.listarProyectos}" var="proyecto">
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Código"/>
                         </f:facet>
+                        <h:outputText value="#{proyecto.código}"/>
                         <f:facet name="footer">
                             <h:inputText/>
                         </f:facet>     
@@ -24,6 +25,7 @@
                         <f:facet name="header">
                             <h:outputText value="Nombre"/>
                         </f:facet>
+                        <h:outputText value="#{proyecto.nombreProyecto}"/>
                         <f:facet name="footer">
                             <h:inputText/>
                         </f:facet>
@@ -32,6 +34,7 @@
                         <f:facet name="header">
                             <h:outputText value="Descripcion"/>
                         </f:facet>
+                        <h:outputText value="#{proyecto.descripción}"/>
                         <f:facet name="footer">
                             <h:inputText/>
                         </f:facet>
@@ -40,6 +43,7 @@
                         <f:facet name="header">
                             <h:outputText value="Combustible (%)"/>
                         </f:facet>
+                        <h:outputText value="#{proyecto.repartoCombustible}"/>
                         <f:facet name="footer">
                             <h:inputText/>
                         </f:facet>
@@ -48,6 +52,7 @@
                         <f:facet name="header">
                             <h:outputText value="Mantenimiento (%)"/>
                         </f:facet>
+                        <h:outputText value="#{proyecto.repartoMantenimiento}"/>
                         <f:facet name="footer">
                             <h:inputText/>
                         </f:facet>
@@ -56,6 +61,7 @@
                         <f:facet name="header">
                             <h:outputText value="Contenedor (%)"/>
                         </f:facet>
+                        <h:outputText value="#{proyecto.repartoContenedor}"/>
                         <f:facet name="footer">
                             <h:inputText/>
                         </f:facet>
