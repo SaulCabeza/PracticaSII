@@ -11,63 +11,75 @@
     <ui:define name="contenido">
         <h:body>
             <h:form>
-                <h:dataTable value="#{proyectoBean.listarProyectos}" var="proyecto">
+                <h:dataTable value="#{proyecto.listProyectos}" var="pr" border="1">
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Código"/>
                         </f:facet>
-                        <h:outputText value="#{proyecto.código}"/>
+                        <h:outputText value="#{pr.código}"/>
                         <f:facet name="footer">
-                            <h:inputText/>
+                            <h:inputText value="#{proyecto.código}"/>
                         </f:facet>     
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Nombre"/>
                         </f:facet>
-                        <h:outputText value="#{proyecto.nombreProyecto}"/>
+                        <h:outputText value="#{pr.nombreProyecto}"/>
                         <f:facet name="footer">
-                            <h:inputText/>
+                            <h:inputText value="#{proyecto.nombreProyecto}"/>
                         </f:facet>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Descripcion"/>
                         </f:facet>
-                        <h:outputText value="#{proyecto.descripción}"/>
+                        <h:outputText value="#{pr.descripción}"/>
                         <f:facet name="footer">
-                            <h:inputText/>
+                            <h:inputText value="#{proyecto.descripción}"/>
                         </f:facet>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Combustible (%)"/>
                         </f:facet>
-                        <h:outputText value="#{proyecto.repartoCombustible}"/>
+                        <h:outputText value="#{pr.repartoCombustible}"/>
                         <f:facet name="footer">
-                            <h:inputText/>
+                            <h:inputText value="#{proyecto.repartoCombustible}"/>
                         </f:facet>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Mantenimiento (%)"/>
                         </f:facet>
-                        <h:outputText value="#{proyecto.repartoMantenimiento}"/>
+                        <h:outputText value="#{pr.repartoMantenimiento}"/>
                         <f:facet name="footer">
-                            <h:inputText/>
+                            <h:inputText value="#{proyecto.repartoMantenimiento}"/>
                         </f:facet>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Contenedor (%)"/>
                         </f:facet>
-                        <h:outputText value="#{proyecto.repartoContenedor}"/>
+                        <h:outputText value="#{pr.repartoContenedor}"/>
                         <f:facet name="footer">
-                            <h:inputText/>
+                            <h:inputText value="#{proyecto.repartoContenedor}"/>
                         </f:facet>
                     </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Coste (€)"/>
+                        </f:facet>
+                        <h:outputText value="#{pr.costeTotal}"/>
+                        <f:facet name="footer">
+                            <h:inputText value="#{proyecto.costeTotal}"/>
+                        </f:facet>
+                    </h:column>
+                    <h:column>
+                        <h:commandButton action="#{proyecto.eliminar(pr)}" value="borrar"></h:commandButton>
+                    </h:column>
                 </h:dataTable>
-                <br></br><div align="right"><h:commandButton value="Añadir proyecto" type="submit" class="boton"></h:commandButton></div>
+                <br></br><div align="right"><h:commandButton value="Añadir proyecto" type="submit" class="boton" action="#{proyecto.add()}"></h:commandButton></div>
             </h:form>   
         </h:body>
     </ui:define>
