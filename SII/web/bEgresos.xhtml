@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="./resources/css/busqueda.css" rel="stylesheet" type="text/css" />
+        <link href="./resources/css/layaout.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <title>
+        Buscar Egresos
+    </title>
+    <h:body>
+        <br></br>
+        <form action="egresos.xhtml">
+            <input value="Volver" type="submit" class="button2" />
+        </form>
+        <br></br>
+        <h2>Buscar Egresos</h2>
+        <br></br>
+        <br></br>
+        <h:form class="form">         
+            <h:inputText class="input" required="true" a:placeholder="Introduce concepto del egreso" requiredMessage="Introduce concepto del egreso" value="#{egresoBean.nombreEg}"/>
+            <h:commandButton  value="Buscar" class="button1" type="submit" action="#{egresoBean.buscar()}"></h:commandButton>
+        </h:form>
+        <br></br>
+        <br></br>
+        <h:body>
+            <h:form>
+                <h:dataTable value="#{egresoBean.listaBusqueda}" var="egreso" border="1">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Código"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.codigoEgreso}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Beneficiario"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.nombreBeneficiario}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Concepto"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.concepto}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Importe (€)"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.importe}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Fecha"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.fecha}">
+                            <f:convertDateTime pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+   
+                    </h:column>
+                </h:dataTable>
+            </h:form>   
+        </h:body>
+
+    </h:body>
+</html>

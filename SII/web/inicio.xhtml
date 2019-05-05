@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="./resources/css/layaout.css" rel="stylesheet" type="text/css" />
+        <title>
+            <ui:insert name="titulo">Inicio</ui:insert>
+        </title>
+    </h:head>
+    
+    <h:body>
+        <h1>ACOES</h1>
+        <h:form>
+        <nav>
+            <a href="proyectos.xhtml">PROYECTOS</a>
+            <a href="egresos.xhtml">EGRESOS</a>
+            <a href="ingresos.xhtml">INGRESOS</a>
+            <a href="ordenes.xhtml">ORDENES DE PAGO</a>
+            <h:commandLink immediate="true" value="Salir" class="salir" action="#{controlAutorizacion.logout()}"/>
+            <div class="animation start-home"></div>
+        </nav>
+        </h:form>
+        <ui:insert name="pagina"></ui:insert>
+        <div>
+             <ui:insert name="contenido"/>
+        </div>
+    </h:body>
+</html>
+

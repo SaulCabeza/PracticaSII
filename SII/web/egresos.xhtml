@@ -1,0 +1,82 @@
+<ui:composition template="inicio.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="titulo">Egresos</ui:define>
+    <ui:define name="pagina">
+        <br></br>
+        <br></br>
+        <form  action="bEgresos.xhtml">
+            <input value="Buscar" type="submit" class="boton2" />
+        </form>
+        <h2>Egresos</h2>
+        <br></br>
+        <br></br>
+    </ui:define>
+    <ui:define name="contenido">
+        <h:body>
+            <h:form>
+                <h:dataTable value="#{egresoBean.listarEgresos}" var="egreso" border="1">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Código"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.codigoEgreso}"/>
+                        <f:facet name="footer">
+                            <h:inputText class="add" value="#{egresoBean.egreso.codigoEgreso}" rendered="#{controlAutorizacion.darRol()}"/>
+                        </f:facet>     
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Beneficiario"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.nombreBeneficiario}"/>
+                        <f:facet name="footer">
+                            <h:inputText class="add" value="#{egresoBean.egreso.nombreBeneficiario}" rendered="#{controlAutorizacion.darRol()}"/>
+                        </f:facet>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Concepto"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.concepto}"/>
+                        <f:facet name="footer">
+                            <h:inputText class="add" value="#{egresoBean.egreso.concepto}" rendered="#{controlAutorizacion.darRol()}"/>
+                        </f:facet>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Importe (€)"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.importe}"/>
+                        <f:facet name="footer">
+                            <h:inputText class="add" value="#{egresoBean.egreso.importe}" rendered="#{controlAutorizacion.darRol()}"/>
+                        </f:facet>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Fecha"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.fecha}">
+                            <f:convertDateTime pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                        <f:facet name="footer">
+                            <h:inputText class="add" value="#{egresoBean.egreso.fecha}" rendered="#{controlAutorizacion.darRol()}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:inputText>
+                        </f:facet>
+                    </h:column>
+                    <h:column rendered="#{controlAutorizacion.darRol()}">
+                        <h:commandButton class="boton" value="Borrar" action="#{egresoBean.deleteEgreso(egreso)}"/>
+                        <f:facet name="footer">
+                            <h:commandButton rendered="#{controlAutorizacion.darRol()}" value="Añadir" type="submit" class="boton1" action="#{egresoBean.addEgreso()}"/>
+                        </f:facet>
+                    </h:column>
+                </h:dataTable>
+            </h:form>   
+        </h:body>
+    </ui:define>
+</ui:composition>
+

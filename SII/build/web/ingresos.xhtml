@@ -1,0 +1,73 @@
+<ui:composition template="inicio.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="titulo">Ingresos</ui:define>
+    <ui:define name="pagina">
+        <br></br>
+        <br></br>
+        <form  action="bIngresos.xhtml">
+            <input value="Buscar" type="submit" class="boton2" />
+        </form>
+        <h2>Ingresos</h2>
+        <br></br>
+        <br></br>
+    </ui:define>
+    <ui:define name="contenido">
+        <h:body>
+            <h:form>
+                <h:dataTable value="#{ingresoBean.listarIngresos}" var="ingreso" border="1">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Código"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{ingreso.codigoIngreso}"/>
+                        <f:facet name="footer">
+                            <h:inputText class="add" value="#{ingresoBean.ing.codigoIngreso}" rendered="#{controlAutorizacion.darRol()}"/>
+                        </f:facet>     
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Fecha"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{ingreso.fecha}">
+                             <f:convertDateTime pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                        <f:facet name="footer">
+                            <h:inputText class="add" value="#{ingresoBean.ing.fecha}" rendered="#{controlAutorizacion.darRol()}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:inputText>
+                        </f:facet>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Descripción"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{ingreso.descripcion}"/>
+                        <f:facet name="footer">
+                            <h:inputText class="add" value="#{ingresoBean.ing.descripcion}" rendered="#{controlAutorizacion.darRol()}"/>
+                        </f:facet>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Importe (€)"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{ingreso.cantidad}"/>
+                        <f:facet name="footer">
+                            <h:inputText class="add" value="#{ingresoBean.ing.cantidad}" rendered="#{controlAutorizacion.darRol()}"/>
+                        </f:facet>
+                    </h:column>
+                    <h:column rendered="#{controlAutorizacion.darRol()}">
+                        <h:commandButton class="boton" value="Borrar" action="#{ingresoBean.eliminarIngreso(ingreso)}"/>
+                        <f:facet name="footer">
+                            <h:commandButton rendered="#{controlAutorizacion.darRol()}" value="Añadir" type="submit" class="boton1" action="#{ingresoBean.addIngreso()}"/>
+                        </f:facet>
+                    </h:column>
+                </h:dataTable>
+            </h:form>   
+        </h:body>
+    </ui:define>
+</ui:composition>
+
