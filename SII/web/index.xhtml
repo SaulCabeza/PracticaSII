@@ -18,13 +18,11 @@
                 <h:inputText class="usu" value="#{login.usuario}"/><br/><br/>
                 <h3>CONTRASEÑA</h3>
                 <h:inputSecret class="pass" value="#{login.contrasenia}"/>
-                <br></br>
-                <br></br>
                 <h:commandButton class="boton" value="Autenticar" action="#{login.autenticar()}"/>
+                <h:commandButton class="boton" value="Registrarse" action="registro.xhtml"/>
         </h:form>
         </div>
         <c:if test="#{!empty controlAutorizacion.usuario}"><p>Debe salir de la aplicación si quiere entrar como otro usuario</p></c:if>
         <h:messages/>
     </h:body>
 </html>
-

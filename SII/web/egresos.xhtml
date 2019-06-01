@@ -24,15 +24,13 @@
                             <h:outputText class="cabecera" value="Código"/>
                         </f:facet>
                         <h:outputText class="contenido" value="#{egreso.codigoEgreso}"/>
-                        <f:facet name="footer">
-                            <h:inputText class="add" value="#{egresoBean.egreso.codigoEgreso}" rendered="#{controlAutorizacion.darRol()}"/>
-                        </f:facet>     
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Beneficiario"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{egreso.nombreBeneficiario}"/>
+                        <h:outputText class="contenido" value="#{egreso.nombreBeneficiario}" rendered="#{not egreso.editable}"/>
+                        <h:inputText class="add" value="#{egresoBean.editegreso.nombreBeneficiario}" rendered="#{egreso.editable}"/>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{egresoBean.egreso.nombreBeneficiario}" rendered="#{controlAutorizacion.darRol()}"/>
                         </f:facet>
@@ -41,7 +39,8 @@
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Concepto"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{egreso.concepto}"/>
+                        <h:outputText class="contenido" value="#{egreso.concepto}" rendered="#{not egreso.editable}"/>
+                        <h:inputText class="add" value="#{egresoBean.editegreso.concepto}" rendered="#{egreso.editable}"/>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{egresoBean.egreso.concepto}" rendered="#{controlAutorizacion.darRol()}"/>
                         </f:facet>
@@ -50,7 +49,8 @@
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Importe (€)"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{egreso.importe}"/>
+                        <h:outputText class="contenido" value="#{egreso.importe}" rendered="#{not egreso.editable}"/>
+                        <h:inputText class="add" value="#{egresoBean.editegreso.importe}" rendered="#{egreso.editable}"/>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{egresoBean.egreso.importe}" rendered="#{controlAutorizacion.darRol()}"/>
                         </f:facet>
@@ -59,17 +59,52 @@
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Fecha"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{egreso.fecha}">
+                        <h:outputText class="contenido" value="#{egreso.fecha}" rendered="#{not egreso.editable}">
                             <f:convertDateTime pattern="dd-MM-yyyy"/>
                         </h:outputText>
+                        <h:inputText class="add" value="#{egresoBean.editegreso.fecha}" rendered="#{egreso.editable}">
+                            <f:convertDateTime pattern="dd-MM-yyyy"/>
+                        </h:inputText>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{egresoBean.egreso.fecha}" rendered="#{controlAutorizacion.darRol()}">
                                 <f:convertDateTime pattern="dd-MM-yyyy"/>
                             </h:inputText>
                         </f:facet>
                     </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Proyecto asociado"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.proyectosCódigo.nombreProyecto}" rendered="#{not egreso.editable}"/>
+                        <h:selectOneMenu class="add" value="#{egresoBean.editpr}" rendered="#{egreso.editable}">
+                            <f:selectItems value="#{egresoBean.listaProy}" var="proyecto" itemLabel="#{proyecto.nombreProyecto}" itemValue="#{proyecto.código}"/>
+                        </h:selectOneMenu>
+                        <f:facet name="footer">
+                            <h:selectOneMenu class="add" value="#{egresoBean.pr}" rendered="#{controlAutorizacion.darRol()}">
+                                <f:selectItems value="#{egresoBean.listaProy}" var="proyecto" itemLabel="#{proyecto.nombreProyecto}" itemValue="#{proyecto.código}"/>
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText class="cabecera" value="Orden de pago"/>
+                        </f:facet>
+                        <h:outputText class="contenido" value="#{egreso.ordenesPagoNumero.numero}" rendered="#{not egreso.editable}"/>
+                        <h:selectOneMenu class="add" value="#{egresoBean.editop}" rendered="#{egreso.editable}">
+                            <f:selectItem itemValue="#{null}" itemLabel="--ninguno--" />
+                            <f:selectItems value="#{egresoBean.listaOrdP}" var="orden" itemLabel="#{orden.numero}" itemValue="#{orden.numero}"/>
+                        </h:selectOneMenu>
+                        <f:facet name="footer">
+                            <h:selectOneMenu class="add" value="#{egresoBean.op}" rendered="#{controlAutorizacion.darRol()}">
+                                <f:selectItem itemValue="#{null}" itemLabel="--ninguno--" />
+                                <f:selectItems value="#{egresoBean.listaOrdP}" var="orden" itemLabel="#{orden.numero}" itemValue="#{orden.numero}"/>
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </h:column>
                     <h:column rendered="#{controlAutorizacion.darRol()}">
                         <h:commandButton class="boton" value="Borrar" action="#{egresoBean.deleteEgreso(egreso)}"/>
+                        <h:commandButton class="boton" value="Editar" action="#{egresoBean.editar(egreso)}" rendered="#{not egreso.editable}"/>
+                        <h:commandButton class="boton" value="Guardar" action="#{egresoBean.guardar(egreso)}" rendered="#{egreso.editable}"/>
                         <f:facet name="footer">
                             <h:commandButton rendered="#{controlAutorizacion.darRol()}" value="Añadir" type="submit" class="boton1" action="#{egresoBean.addEgreso()}"/>
                         </f:facet>

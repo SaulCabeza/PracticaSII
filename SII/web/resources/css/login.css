@@ -43,11 +43,14 @@ p{
     padding: 8px;
     width: 250px;
     color: #AAAAAA;
-    margin-top: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     font-size: 1em;
     border-radius: 4px;
 }
 .pass {
+    margin-top: 15px;
+    margin-bottom: 15px;
     border-radius: 4px;
     background: #ecf0f1;
     border: #ccc 1px solid;
@@ -67,4 +70,12 @@ p{
 }
 .boton:hover{
     background: #ebf9f5; 
+}
+
+.titulo{
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 18px;
+    font-family: sans-serif;
+
 }

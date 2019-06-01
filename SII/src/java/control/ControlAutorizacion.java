@@ -10,7 +10,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import proyectosii.Usuario;
-import proyectosii.Usuario.Rol;
 
 @Named(value = "controlAutorizacion")
 @SessionScoped
@@ -28,11 +27,11 @@ public class ControlAutorizacion implements Serializable{
 
     public String home() {
         if (usuario != null) {
-            Rol rol = usuario.getRol();
+            String rol = usuario.getRol();
             switch (rol) {
-                case ADMINISTRADOR:
+                case "ADMIN":
                     return "inicio.xhtml";
-                case NORMAL:
+                case "NORMAL":
                     return "inicio.xhtml";
                 default:
                     return "inicio.xhtml";
@@ -43,7 +42,7 @@ public class ControlAutorizacion implements Serializable{
     }
     
     public boolean darRol(){
-        return this.usuario.getRol().equals(Rol.ADMINISTRADOR);
+        return this.usuario.getRol().equals("ADMIN");
     }
 
     public String logout() {

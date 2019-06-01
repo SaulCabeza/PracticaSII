@@ -23,16 +23,14 @@
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Código"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{proyecto.código}"/>
-                        <f:facet name="footer">
-                            <h:inputText class="add" value="#{proyectoBean.proy.código}" rendered="#{controlAutorizacion.darRol()}"/>
-                        </f:facet>     
+                        <h:outputText class="contenido" value="#{proyecto.código}"/>    
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Nombre"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{proyecto.nombreProyecto}"/>
+                        <h:outputText class="contenido" value="#{proyecto.nombreProyecto}" rendered="#{not proyecto.editable}"/>
+                        <h:inputText class="add" value="#{proyectoBean.editproy.nombreProyecto}" rendered="#{proyecto.editable}"/>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{proyectoBean.proy.nombreProyecto}" rendered="#{controlAutorizacion.darRol()}"/>
                         </f:facet>
@@ -41,7 +39,8 @@
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Descripcion"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{proyecto.descripción}"/>
+                        <h:outputText class="contenido" value="#{proyecto.descripción}" rendered="#{not proyecto.editable}"/>
+                        <h:inputText class="add" value="#{proyectoBean.editproy.descripción}" rendered="#{proyecto.editable}"/>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{proyectoBean.proy.descripción}" rendered="#{controlAutorizacion.darRol()}"/>
                         </f:facet>
@@ -50,7 +49,8 @@
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Combustible (%)"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{proyecto.repartoCombustible}"/>
+                        <h:outputText class="contenido" value="#{proyecto.repartoCombustible}" rendered="#{not proyecto.editable}"/>
+                        <h:inputText class="add" value="#{proyectoBean.editproy.repartoCombustible}" rendered="#{proyecto.editable}"/>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{proyectoBean.proy.repartoCombustible}" rendered="#{controlAutorizacion.darRol()}"/>
                         </f:facet>
@@ -59,7 +59,8 @@
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Mantenimiento (%)"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{proyecto.repartoMantenimiento}"/>
+                        <h:outputText class="contenido" value="#{proyecto.repartoMantenimiento}" rendered="#{not proyecto.editable}"/>
+                        <h:inputText class="add" value="#{proyectoBean.editproy.repartoMantenimiento}" rendered="#{proyecto.editable}"/>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{proyectoBean.proy.repartoMantenimiento}" rendered="#{controlAutorizacion.darRol()}"/>
                         </f:facet>
@@ -68,7 +69,8 @@
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Contenedor (%)"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{proyecto.repartoContenedor}"/>
+                        <h:outputText class="contenido" value="#{proyecto.repartoContenedor}" rendered="#{not proyecto.editable}"/>
+                        <h:inputText class="add" value="#{proyectoBean.editproy.repartoContenedor}" rendered="#{proyecto.editable}"/>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{proyectoBean.proy.repartoContenedor}" rendered="#{controlAutorizacion.darRol()}"/>
                         </f:facet>
@@ -77,13 +79,16 @@
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Coste (€)"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{proyecto.costeTotal}"/>
+                        <h:outputText class="contenido" value="#{proyecto.costeTotal}" rendered="#{not proyecto.editable}"/>
+                        <h:inputText class="add" value="#{proyectoBean.editproy.costeTotal}" rendered="#{proyecto.editable}"/>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{proyectoBean.proy.costeTotal}" rendered="#{controlAutorizacion.darRol()}"/>
                         </f:facet>
                     </h:column>
                     <h:column rendered="#{controlAutorizacion.darRol()}">
                         <h:commandButton class="boton" value="Borrar" action="#{proyectoBean.deleteProyecto(proyecto)}"/>
+                        <h:commandButton class="boton" value="Editar" action="#{proyectoBean.editar(proyecto)}" rendered="#{not proyecto.editable}"/>
+                        <h:commandButton class="boton" value="Guardar" action="#{proyectoBean.guardar(proyecto)}" rendered="#{proyecto.editable}"/>
                         <f:facet name="footer">
                             <h:commandButton rendered="#{controlAutorizacion.darRol()}" value="Añadir" type="submit" class="boton1" action="#{proyectoBean.addProyecto()}"/>
                         </f:facet>

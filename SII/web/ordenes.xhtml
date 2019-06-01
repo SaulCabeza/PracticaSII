@@ -24,15 +24,13 @@
                             <h:outputText class="cabecera" value="Código"/>
                         </f:facet>
                         <h:outputText class="contenido" value="#{ordenPago.numero}"/>
-                        <f:facet name="footer">
-                            <h:inputText class="add" value="#{ordenPagoBean.ordenP.numero}" rendered="#{controlAutorizacion.darRol()}"/>
-                        </f:facet>     
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Emisor"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{ordenPago.emisor}"/>
+                        <h:outputText class="contenido" value="#{ordenPago.emisor}" rendered="#{not ordenPago.editable}"/>
+                        <h:inputText class="add" value="#{ordenPagoBean.editordenP.emisor}" rendered="#{ordenPago.editable}"/>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{ordenPagoBean.ordenP.emisor}" rendered="#{controlAutorizacion.darRol()}"/>
                         </f:facet>
@@ -41,9 +39,12 @@
                         <f:facet name="header">
                             <h:outputText class="cabecera" value="Fecha"/>
                         </f:facet>
-                        <h:outputText class="contenido" value="#{ordenPago.fecha}">
+                        <h:outputText class="add" value="#{ordenPago.fecha}" rendered="#{not ordenPago.editable}">
                              <f:convertDateTime pattern="dd-MM-yyyy"/>
                         </h:outputText>
+                        <h:inputText class="add" value="#{ordenPagoBean.editordenP.fecha}" rendered="#{ordenPago.editable}">
+                            <f:convertDateTime pattern="dd-MM-yyyy"/>
+                        </h:inputText>
                         <f:facet name="footer">
                             <h:inputText class="add" value="#{ordenPagoBean.ordenP.fecha}" rendered="#{controlAutorizacion.darRol()}">
                                 <f:convertDateTime pattern="dd-MM-yyyy"/>
@@ -52,6 +53,8 @@
                     </h:column>
                     <h:column rendered="#{controlAutorizacion.darRol()}">
                         <h:commandButton class="boton" value="Borrar" action="#{ordenPagoBean.deleteOrdenPago(ordenPago)}"/>
+                        <h:commandButton class="boton" value="Editar" action="#{ordenPagoBean.editar(ordenPago)}" rendered="#{not ordenPago.editable}"/>
+                        <h:commandButton class="boton" value="Guardar" action="#{ordenPagoBean.guardar(ordenPago)}" rendered="#{ordenPago.editable}"/>
                         <f:facet name="footer">
                             <h:commandButton rendered="#{controlAutorizacion.darRol()}" value="Añadir" type="submit" class="boton1" action="#{ordenPagoBean.addOrdenPago()}"/>
                         </f:facet>

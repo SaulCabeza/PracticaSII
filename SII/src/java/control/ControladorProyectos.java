@@ -2,21 +2,29 @@ package control;
 
 import proyectosii.Proyectos;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import servicio.ProyectosFacade;
 
 @ManagedBean(name = "proyectoBean")
-@SessionScoped
+@ViewScoped
 
 public class ControladorProyectos implements Serializable{
     
+    @EJB
+    private ProyectosFacade proyf;
+    
     private Proyectos proy;
+    private Proyectos editproy;
     private String nombrePr;
+    
     private ArrayList<Proyectos> listaBusqueda;
     private ArrayList<Proyectos> listarProyectos;
     
@@ -28,13 +36,16 @@ public class ControladorProyectos implements Serializable{
     }
     
     public ControladorProyectos() {
+        editproy = new Proyectos();
         proy = new Proyectos();
         nombrePr = "";
-        listarProyectos = new ArrayList<Proyectos>();
-        listaBusqueda = new ArrayList<Proyectos>();
-        listarProyectos.add(new Proyectos(BigDecimal.valueOf(1), "pr1", "prueba", new BigInteger("20"), new BigInteger("30"), new BigInteger("40"), new BigInteger("4000")));
-        listarProyectos.add(new Proyectos(BigDecimal.valueOf(2), "pr1", "prueba", new BigInteger("20"), new BigInteger("30"), new BigInteger("40"), new BigInteger("4000")));
-        listarProyectos.add(new Proyectos(BigDecimal.valueOf(3), "pr1", "prueba", new BigInteger("20"), new BigInteger("30"), new BigInteger("40"), new BigInteger("4000")));
+        listarProyectos = new ArrayList<>();
+        listaBusqueda = new ArrayList<>();
+    }
+    
+    @PostConstruct
+    public void init() {
+        listarProyectos = new ArrayList<>(proyf.findAll());
     }
 
     public ArrayList<Proyectos> getListarProyectos() {
@@ -45,26 +56,42 @@ public class ControladorProyectos implements Serializable{
         this.listarProyectos = listarProyectos;
     }
     
-    public void addProyecto() {
-        boolean ins = true;
-        if(proy.getCódigo() == null || proy.getCódigo().intValue() < 0) ins = false;
-        for(Proyectos p : listarProyectos){
-            if (p.getCódigo().equals(proy.getCódigo())) {
-                ins = false;
-                break;
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void addProyecto() throws Exception {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        if (listarProyectos == null) listarProyectos = new ArrayList<>();
+        else if (proy.getNombreProyecto() == null || proy.getNombreProyecto().equals("")) ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha proporcionado un nombre para el proyecto", "Proyecto sin nombre"));
+        else if (proy.getDescripción() == null || proy.getDescripción().equals("")) ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha proporcionado una descripción", "Proyecto sin descripción"));
+        else if (proy.getCosteTotal() == null) ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha proporcionado un coste total", "Proyecto sin coste total"));
+        else {
+            try {
+                Proyectos p = new Proyectos(proy.getCódigo(), proy.getNombreProyecto(), proy.getDescripción(), proy.getRepartoCombustible(), proy.getRepartoMantenimiento(), proy.getRepartoContenedor(), proy.getCosteTotal());
+                proyf.create(p);
+            } catch (Exception e) {
+                ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Error en la transacción"));
+            } finally {
+                listarProyectos = new ArrayList<>(proyf.findAll());
             }
-        }
-        if(ins) listarProyectos.add(new Proyectos(proy.getCódigo(), proy.getNombreProyecto(), proy.getDescripción(), proy.getRepartoCombustible(), proy.getRepartoMantenimiento(), proy.getRepartoContenedor(), proy.getCosteTotal()));
-        else{
-            FacesContext ctx = FacesContext.getCurrentInstance();
-            ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Código de proyecto inválido", "Código de proyecto inválido"));
-        }
-        proy = new Proyectos();
+            proy = new Proyectos();
+        }  
     }
     
-    public String deleteProyecto(Proyectos pr) {
-        listarProyectos.remove(pr);
-        return "proyectos.xhtml";
+    public void editar(Proyectos p) {
+        editproy = new Proyectos(p.getCódigo(), p.getNombreProyecto(), p.getDescripción(), p.getRepartoCombustible(), p.getRepartoMantenimiento(), p.getRepartoContenedor(), p.getCosteTotal());
+        p.setEditable(true);
+        for(Proyectos pr : listarProyectos) if(pr.getCódigo() != p.getCódigo()) pr.setEditable(false);
+    }
+   
+    public void guardar(Proyectos pr) {
+        Proyectos p = new Proyectos(editproy.getCódigo(), editproy.getNombreProyecto(), editproy.getDescripción(), editproy.getRepartoCombustible(), editproy.getRepartoMantenimiento(), editproy.getRepartoContenedor(), editproy.getCosteTotal());
+        proyf.edit(p);
+        pr.setEditable(false);
+        listarProyectos = new ArrayList<>(proyf.findAll());
+    }
+    
+    public void deleteProyecto(Proyectos pr) {
+        proyf.remove(pr);
+        listarProyectos = new ArrayList<>(proyf.findAll());
     }
 
     public Proyectos getProy() {
@@ -89,6 +116,22 @@ public class ControladorProyectos implements Serializable{
 
     public void setListaBusqueda(ArrayList<Proyectos> listaBusqueda) {
         this.listaBusqueda = listaBusqueda;
+    }
+
+    public ProyectosFacade getProyf() {
+        return proyf;
+    }
+
+    public void setProyf(ProyectosFacade proyf) {
+        this.proyf = proyf;
+    }
+
+    public Proyectos getEditproy() {
+        return editproy;
+    }
+
+    public void setEditproy(Proyectos editproy) {
+        this.editproy = editproy;
     }
     
 }

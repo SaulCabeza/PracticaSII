@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Registro de usuario</title>
+        <link href="./resources/css/login.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h1>ACOES</h1>
+    <h:body>
+        <h2>Registro de Usuario</h2>
+        <div class="box">
+            <h:form id="registro">
+                <br/>
+                <h:outputText class="titulo" value="Nombre:"/>
+                <h:inputText class="usu" id="nombre" />
+                <br/>
+                <h:outputText class="titulo" value="Apellidos:"/>
+                <h:inputText class="usu" id="apellidos" />
+                <br/>
+                <h:outputText class="titulo" value="E-mail:"/>
+                <h:inputText class="usu" id="email" required="true"
+                             validatorMessage="Compruebe que ha introducido un e-mail correcto">
+                    <f:validateRegex pattern=".+@.+"/>
+                </h:inputText>
+                <br/>
+                <h:outputText class="titulo" value="Nombre de usuario:"/>
+                <h:inputText class="usu" id="user" value="#{registro.usuario.usuario}" required="true"/>
+                <br/>
+                <h:outputText class="titulo" value="Contraseña:"/>
+                <h:inputSecret class="pass" id="pass" value="#{registro.usuario.contrasenia}" required="true"/>
+                <br/>
+                <h:outputText class="titulo" value="Repita la contraseña:"/>
+                <h:inputSecret class="pass" id="repass" value="#{registro.repass}" required="true"/>
+                <br/>
+                <h:commandButton class="boton" value="Crear usuario" action="#{registro.registrarUsuario()}"/>
+                <br/>
+                <h:link outcome="index.xhtml">Volver a la página de login</h:link>
+
+            </h:form>
+
+        </div>
+    </h:body>
+</html>
+

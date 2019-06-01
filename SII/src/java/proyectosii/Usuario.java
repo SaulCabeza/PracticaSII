@@ -1,78 +1,95 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package proyectosii;
 
 import java.io.Serializable;
-import java.util.Objects;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author migov
+ */
 @Entity
+@Table(name = "USUARIO")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
+    , @NamedQuery(name = "Usuario.findByUsuario", query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario")
+    , @NamedQuery(name = "Usuario.findByContrasenia", query = "SELECT u FROM Usuario u WHERE u.contrasenia = :contrasenia")
+    , @NamedQuery(name = "Usuario.findByRol", query = "SELECT u FROM Usuario u WHERE u.rol = :rol")})
 public class Usuario implements Serializable {
-    
-    public enum Rol {
-        ADMINISTRADOR,
-        NORMAL
-    };
-    
+
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 16)
+    @Column(name = "USUARIO")
     private String usuario;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 16)
+    @Column(name = "CONTRASENIA")
     private String contrasenia;
-    @Enumerated(EnumType.STRING)
-    private Rol rol;
-    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 6)
+    @Column(name = "ROL")
+    private String rol;
+
     public Usuario() {
-        
-    }
-    
-    public Usuario (String usuario, String contrasenia, Rol rol) {
-        setUsuario(usuario);
-        setContrasenia(contrasenia);
-        setRol(rol);
     }
 
-    public void setRol(Rol rol) {
-        this.rol = rol;
-    }
-
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setUsuario(String usuario) {
+    public Usuario(String usuario) {
         this.usuario = usuario;
     }
 
-    public void setContrasenia(String contrasenia) {
+    public Usuario(String usuario, String contrasenia, String rol) {
+        this.usuario = usuario;
         this.contrasenia = contrasenia;
+        this.rol = rol;
     }
 
     public String getUsuario() {
         return usuario;
     }
 
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
     public String getContrasenia() {
         return contrasenia;
     }
-    
 
-    public Long getId() {
-        return id;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (usuario != null ? usuario.hashCode() : 0);
         return hash;
     }
 
@@ -83,10 +100,15 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.usuario == null && other.usuario != null) || (this.usuario != null && !this.usuario.equals(other.usuario))) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "control.Usuario[ usuario=" + usuario + " ]";
     }
     
 }

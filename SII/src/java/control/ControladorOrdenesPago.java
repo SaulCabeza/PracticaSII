@@ -1,23 +1,36 @@
 package control;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import proyectosii.OrdenesPago;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import proyectosii.Egresos;
+import servicio.EgresosFacade;
+import servicio.OrdenesPagoFacade;
 
 @ManagedBean(name = "ordenPagoBean")
-@SessionScoped
+@ViewScoped
 
-public class ControladorOrdenesPago implements Serializable{
+public class ControladorOrdenesPago {
     
+    @EJB
+    private OrdenesPagoFacade ordenPf;
+    @EJB
+    private EgresosFacade egresof;
+
     private OrdenesPago ordenP;
+    private OrdenesPago editordenP;
     private String nombreOrd;
+    
     private ArrayList<OrdenesPago> listaBusqueda;
     private ArrayList<OrdenesPago> listarOrdenesPago;
     
@@ -29,13 +42,16 @@ public class ControladorOrdenesPago implements Serializable{
     }
     
     public ControladorOrdenesPago() {
+        editordenP = new OrdenesPago();
         ordenP = new OrdenesPago();
         nombreOrd = "";
-        listaBusqueda = new ArrayList<OrdenesPago>();
-        listarOrdenesPago = new ArrayList<OrdenesPago>();
-        listarOrdenesPago.add(new OrdenesPago(BigDecimal.valueOf(200), new Date(2017, 12, 1), "José Rodríguez"));
-        listarOrdenesPago.add(new OrdenesPago(BigDecimal.valueOf(300), new Date(2019,6,10), "Luis Sánchez"));
-        listarOrdenesPago.add(new OrdenesPago(BigDecimal.valueOf(400), new Date(2019,7,12), "Juan Pérez"));
+        listaBusqueda = new ArrayList<>();
+        listarOrdenesPago = new ArrayList<>();
+    }
+    
+    @PostConstruct
+    public void init() {
+        listarOrdenesPago = new ArrayList<>(ordenPf.findAll());
     }
 
     public ArrayList<OrdenesPago> getListarOrdenesPago() {
@@ -46,26 +62,49 @@ public class ControladorOrdenesPago implements Serializable{
         this.listarOrdenesPago = listOP;
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void addOrdenPago() {
-        boolean ins = true;
-        if (ordenP.getNumero() == null || ordenP.getNumero().intValue() < 0) ins = false;
-        for (OrdenesPago ord : listarOrdenesPago) {
-            if (ord.getNumero().equals(ordenP.getNumero())) {
-                ins = false;
-                break;
-            }
-        }
-        if (ins) listarOrdenesPago.add(new OrdenesPago(ordenP.getNumero(), ordenP.getFecha(), ordenP.getEmisor()));
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        if (listarOrdenesPago == null) listarOrdenesPago = new ArrayList<>();
+        else if (ordenP.getEmisor() == null || ordenP.getEmisor().equals("")) ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha proporcionado un emisor", "Orden de pago sin emisor"));
+        else if (ordenP.getFecha() == null) ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se ha proporcionado una fecha", "Orden de pago sin fecha"));
         else {
-            FacesContext ctx = FacesContext.getCurrentInstance();
-            ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Código de órden inválido", "Código de órden inválido"));
-        }
-        ordenP = new OrdenesPago();
+            try {
+                OrdenesPago op = new OrdenesPago(ordenP.getNumero(), ordenP.getFecha(), ordenP.getEmisor());
+                ordenPf.create(op);
+            } catch (Exception e) {
+                ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Error en la transacción"));
+            } finally {
+                listarOrdenesPago = new ArrayList<>(ordenPf.findAll());
+            }
+            ordenP = new OrdenesPago();
+        }   
     }
     
-    public String deleteOrdenPago(OrdenesPago op) {
-        listarOrdenesPago.remove(op);
-        return "ordenes.xhtml";
+    public void editar(OrdenesPago ordP) {
+        editordenP = new OrdenesPago(ordP.getNumero(), ordP.getFecha(), ordP.getEmisor());
+        ordP.setEditable(true);
+        for(OrdenesPago op : listarOrdenesPago) if(op.getNumero() != ordP.getNumero()) op.setEditable(false);
+    }
+    
+    public void guardar(OrdenesPago ordP) {
+       OrdenesPago op = new OrdenesPago(editordenP.getNumero(), editordenP.getFecha(), editordenP.getEmisor());
+       ordenPf.edit(op);
+       ordP.setEditable(false);
+       listarOrdenesPago = new ArrayList<>(ordenPf.findAll());
+    }
+    
+    public void deleteOrdenPago(OrdenesPago op) {
+        List<Egresos> l = egresof.findAll();
+        for(Egresos e : l){
+            if(e.getOrdenesPagoNumero().getNumero().equals(op.getNumero())){
+                e.setOrdenesPagoNumero(null);
+                egresof.edit(e);
+            }
+        }
+        ordenPf.remove(op);
+        
+        listarOrdenesPago = new ArrayList<>(ordenPf.findAll());
     }
 
     public OrdenesPago getOrdenP() {
@@ -91,5 +130,30 @@ public class ControladorOrdenesPago implements Serializable{
     public void setListaBusqueda(ArrayList<OrdenesPago> listaBusqueda) {
         this.listaBusqueda = listaBusqueda;
     }
+
+    public OrdenesPagoFacade getOrdenPf() {
+        return ordenPf;
+    }
+
+    public void setOrdenPf(OrdenesPagoFacade ordenPf) {
+        this.ordenPf = ordenPf;
+    }
+
+    public OrdenesPago getEditordenP() {
+        return editordenP;
+    }
+
+    public void setEditordenP(OrdenesPago editordenP) {
+        this.editordenP = editordenP;
+    }
+    
+     public EgresosFacade getEgresof() {
+        return egresof;
+    }
+
+    public void setEgresof(EgresosFacade egresof) {
+        this.egresof = egresof;
+    }
+    
     
 }

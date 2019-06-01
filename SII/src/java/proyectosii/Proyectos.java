@@ -13,11 +13,14 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -31,6 +34,7 @@ public class Proyectos implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @Column(name = "C\u00d3DIGO")
     private BigDecimal código;
@@ -56,6 +60,16 @@ public class Proyectos implements Serializable {
     private List<Egresos> egresosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proyectosC\u00f3digo")
     private List<Ingresos> ingresosList;
+    @Transient
+    private boolean editable;
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
 
     public Proyectos() {
     }
@@ -168,7 +182,7 @@ public class Proyectos implements Serializable {
 
     @Override
     public String toString() {
-        return "proyectosii.Proyectos[ c\u00f3digo=" + código + " ]";
+        return nombreProyecto;
     }
     
 }
